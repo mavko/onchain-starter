@@ -14,7 +14,7 @@ import {
 const config = createConfig({
 	chains: [mainnet, base, bsc],
 	connectors: [
-		injected({ target: 'binancewallet' }), // Binance Wallet
+		injected(), // Binance Wallet
 		coinbaseWallet({ appName: 'Portfolio Tracker' }),
 		metaMask(),
 		walletConnect({
@@ -34,7 +34,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 	return (
 		<WagmiProvider config={config}>
 			<QueryClientProvider client={queryClient}>
-				<OnchainKitProvider>{children}</OnchainKitProvider>
+				<OnchainKitProvider chain={mainnet}>{children}</OnchainKitProvider>
 			</QueryClientProvider>
 		</WagmiProvider>
 	)
