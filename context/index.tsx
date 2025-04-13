@@ -1,0 +1,58 @@
+'use client'
+
+import { wagmiAdapter, projectId } from '@/config'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+// import { createAppKit } from '@reown/appkit/react'
+// import { mainnet, arbitrum, avalanche, base, optimism, polygon, bsc } from '@reown/appkit/networks'
+import React, { type ReactNode } from 'react'
+import { cookieToInitialState, WagmiProvider, type Config } from 'wagmi'
+
+// Set up queryClient
+const queryClient = new QueryClient()
+
+if (!projectId) {
+	throw new Error('Project ID is not defined')
+}
+
+// Set up metadata
+// const metadata = {
+// 	name: 'Onchain Starter',
+// 	description: 'A starter kit for building onchain applications',
+// 	url: 'https://onchain-starter.vercel.app',
+// 	icons: ['https://onchain-starter.vercel.app/favicon.ico'],
+// };
+
+// Create the modal
+// const modal = createAppKit({
+// 	adapters: [wagmiAdapter],
+// 	projectId,
+// 	networks: [mainnet, arbitrum, avalanche, base, optimism, polygon, bsc],
+// 	defaultNetwork: mainnet,
+// 	metadata: metadata,
+// 	features: {
+// 		analytics: true,
+// 	}
+// });
+
+function ContextProvider({
+	children,
+	cookies,
+}: {
+	children: ReactNode
+	cookies: string | null
+}) {
+	const initialState = cookieToInitialState(
+		wagmiAdapter.wagmiConfig as Config,
+		cookies
+	)
+
+	return (
+		<WagmiProvider
+			config={wagmiAdapter.wagmiConfig as Config}
+			initialState={initialState}>
+			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+		</WagmiProvider>
+	)
+}
+
+export default ContextProvider
